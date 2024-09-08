@@ -54,8 +54,13 @@ func main() {
 	v1Router.Get("/err", handlerErr)
 	v1Router.Post("/users", apiCfg.handlerCreateUser)
 	v1Router.Get("/users", apiCfg.middlewareAuth(apiCfg.handlerGetUser))
+
 	v1Router.Post("/feeds", apiCfg.middlewareAuth(apiCfg.handlerCreateFeed))
 	v1Router.Get("/feeds", apiCfg.handlerGetFeeds)
+
+	v1Router.Post("/feed_follows", apiCfg.middlewareAuth(apiCfg.handlerCreateFeedFollow))
+	v1Router.Get("/feed_follows", apiCfg.middlewareAuth(apiCfg.handlerGetFeedFollows))
+	v1Router.Delete("/feed_follows/{feedFollowID}", apiCfg.middlewareAuth(apiCfg.handlerDeleteFeedFollow))
 
 	router.Mount("/v1", v1Router)
 
@@ -70,3 +75,13 @@ func main() {
 		log.Fatal(err)
 	}
 }
+
+//[
+//{
+//"id": "b0e7a88b-980b-41af-9e4e-cbbef82f251d",
+//"created_at": "2024-09-08T12:27:51.944168Z",
+//"updated_at": "2024-09-08T12:27:51.944169Z",
+//"user_id": "f756bacc-9db5-4f67-b287-78c654acf4bf",
+//"feed_id": "819815aa-6eac-44a1-8612-67e93d6fedf8"
+//}
+//]
