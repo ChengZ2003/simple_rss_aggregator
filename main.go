@@ -10,6 +10,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 type apiConfig struct {
@@ -34,9 +35,13 @@ func main() {
 		log.Fatal("Can't connect to the database:", err)
 	}
 
+	db := database.New(conn)
+
 	apiCfg := apiConfig{
-		DB: database.New(conn),
+		DB: db,
 	}
+
+	go startScraping(db, 10, time.Minute)
 
 	router := chi.NewRouter()
 
@@ -75,13 +80,3 @@ func main() {
 		log.Fatal(err)
 	}
 }
-
-//[
-//{
-//"id": "b0e7a88b-980b-41af-9e4e-cbbef82f251d",
-//"created_at": "2024-09-08T12:27:51.944168Z",
-//"updated_at": "2024-09-08T12:27:51.944169Z",
-//"user_id": "f756bacc-9db5-4f67-b287-78c654acf4bf",
-//"feed_id": "819815aa-6eac-44a1-8612-67e93d6fedf8"
-//}
-//]
